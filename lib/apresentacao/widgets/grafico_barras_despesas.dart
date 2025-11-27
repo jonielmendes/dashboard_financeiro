@@ -94,9 +94,13 @@ class GraficoBarrasDespesas extends StatelessWidget {
 
                           // Mostra apenas algumas datas para não sobrepor
                           final totalDias = transacoesDiarias.length;
-                          final intervalo = totalDias > 15
-                              ? 3
-                              : (totalDias > 7 ? 2 : 1);
+                          final intervalo = totalDias > 90
+                              ? 30  // Ano: mostra 1x por mês
+                              : (totalDias > 30
+                                  ? 7   // 30-90 dias: mostra 1x por semana
+                                  : (totalDias > 15
+                                      ? 3   // 15-30 dias: mostra a cada 3 dias
+                                      : (totalDias > 7 ? 2 : 1)));
 
                           if (value.toInt() % intervalo != 0) {
                             return const Text('');
