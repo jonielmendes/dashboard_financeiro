@@ -43,7 +43,7 @@ void main() async {
 /// Popula o banco com dados de teste realistas
 Future<void> _popularBancoComDadosTeste(BancoDadosLocal bancoDados) async {
   final db = await bancoDados.database;
-  
+
   // Verifica se já existem transações
   final resultado = await db.query('transacoes', limit: 1);
   if (resultado.isNotEmpty) {
@@ -52,10 +52,10 @@ Future<void> _popularBancoComDadosTeste(BancoDadosLocal bancoDados) async {
   }
 
   print('🔄 Populando banco com dados de teste...');
-  
+
   // Gera transações de teste dos últimos 3 meses
   final transacoesTeste = DadosTeste.gerarTransacoesTeste();
-  
+
   // Insere as transações no banco
   for (final transacao in transacoesTeste) {
     await db.insert('transacoes', {
@@ -70,17 +70,14 @@ Future<void> _popularBancoComDadosTeste(BancoDadosLocal bancoDados) async {
       'atualizado_em': transacao.atualizadoEm.toIso8601String(),
     });
   }
-  
+
   print('✅ ${transacoesTeste.length} transações inseridas com sucesso!');
 }
 
 class DashboardFinanceiroApp extends StatefulWidget {
   final BancoDadosLocal bancoDados;
 
-  const DashboardFinanceiroApp({
-    super.key,
-    required this.bancoDados,
-  });
+  const DashboardFinanceiroApp({super.key, required this.bancoDados});
 
   @override
   State<DashboardFinanceiroApp> createState() => _DashboardFinanceiroAppState();
@@ -109,10 +106,13 @@ class _DashboardFinanceiroAppState extends State<DashboardFinanceiroApp> {
     );
 
     // Inicializa as fontes de dados
-    final transacaoDataSourceLocal = TransacaoDataSourceLocal(widget.bancoDados);
-    final categoriaDataSourceLocal = CategoriaDataSourceLocal(widget.bancoDados);
-    final transacaoDataSourceRemoto =
-        TransacaoDataSourceRemoto(clienteGraphQL);
+    final transacaoDataSourceLocal = TransacaoDataSourceLocal(
+      widget.bancoDados,
+    );
+    final categoriaDataSourceLocal = CategoriaDataSourceLocal(
+      widget.bancoDados,
+    );
+    final transacaoDataSourceRemoto = TransacaoDataSourceRemoto(clienteGraphQL);
 
     // Inicializa os repositórios
     final repositorioTransacao = RepositorioTransacaoImpl(
@@ -132,25 +132,15 @@ class _DashboardFinanceiroAppState extends State<DashboardFinanceiroApp> {
     return MultiBlocProvider(
       providers: [
         // BLoC de Tema
-        BlocProvider(
-          create: (context) => TemaBloc(),
-        ),
+        BlocProvider(create: (context) => TemaBloc()),
         // BLoC de Transações
-        BlocProvider(
-          create: (context) => TransacaoBloc(repositorioTransacao),
-        ),
+        BlocProvider(create: (context) => TransacaoBloc(repositorioTransacao)),
         // BLoC de Categorias
-        BlocProvider(
-          create: (context) => CategoriaBloc(repositorioCategoria),
-        ),
+        BlocProvider(create: (context) => CategoriaBloc(repositorioCategoria)),
         // BLoC de Filtros
-        BlocProvider(
-          create: (context) => FiltroBloc(),
-        ),
+        BlocProvider(create: (context) => FiltroBloc()),
         // BLoC de Relatórios
-        BlocProvider(
-          create: (context) => RelatorioBloc(repositorioRelatorio),
-        ),
+        BlocProvider(create: (context) => RelatorioBloc(repositorioRelatorio)),
       ],
       child: BlocBuilder<TemaBloc, TemaState>(
         builder: (context, temaState) {
@@ -171,10 +161,7 @@ class _DashboardFinanceiroAppState extends State<DashboardFinanceiroApp> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              appBarTheme: const AppBarTheme(
-                centerTitle: true,
-                elevation: 0,
-              ),
+              appBarTheme: const AppBarTheme(centerTitle: true, elevation: 0),
             ),
             // Tema Escuro
             darkTheme: ThemeData(
@@ -189,10 +176,7 @@ class _DashboardFinanceiroAppState extends State<DashboardFinanceiroApp> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              appBarTheme: const AppBarTheme(
-                centerTitle: true,
-                elevation: 0,
-              ),
+              appBarTheme: const AppBarTheme(centerTitle: true, elevation: 0),
             ),
             home: const TelaDashboard(),
           );
@@ -201,5 +185,3 @@ class _DashboardFinanceiroAppState extends State<DashboardFinanceiroApp> {
     );
   }
 }
-
-

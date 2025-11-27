@@ -93,20 +93,32 @@ class GraficoBarrasDespesas extends StatelessWidget {
                           if (value.toInt() >= transacoesDiarias.length) {
                             return const Text('');
                           }
+                          
+                          // Mostra apenas algumas datas para não sobrepor
+                          final totalDias = transacoesDiarias.length;
+                          final intervalo = totalDias > 15 ? 3 : (totalDias > 7 ? 2 : 1);
+                          
+                          if (value.toInt() % intervalo != 0) {
+                            return const Text('');
+                          }
+                          
                           final transacao = transacoesDiarias[value.toInt()];
                           final formatador = DateFormat('dd/MM');
                           return Padding(
                             padding: const EdgeInsets.only(top: 8.0),
-                            child: Text(
-                              formatador.format(transacao.data),
-                              style: const TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
+                            child: Transform.rotate(
+                              angle: -0.5, // Rotaciona 45 graus
+                              child: Text(
+                                formatador.format(transacao.data),
+                                style: const TextStyle(
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           );
                         },
-                        reservedSize: 32,
+                        reservedSize: 40,
                       ),
                     ),
                     leftTitles: AxisTitles(

@@ -17,6 +17,7 @@ import '../bloc/tema/tema_state.dart';
 import '../widgets/cartao_resumo.dart';
 import '../widgets/grafico_barras_despesas.dart';
 import '../widgets/grafico_pizza_categorias.dart';
+import '../widgets/grafico_linha_evolucao.dart';
 
 /// Tela principal do Dashboard Financeiro
 /// Exibe gráficos, resumos e permite filtrar por data e categoria
@@ -50,8 +51,32 @@ class _TelaDashboardState extends State<TelaDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dashboard Financeiro'),
-        elevation: 2,
+        title: const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Dashboard Financeiro',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              'Controle de Fluxo de Caixa',
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
+            ),
+          ],
+        ),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color(0xFF4CAF50), // Verde
+                Color(0xFF2196F3), // Azul
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        elevation: 0,
         actions: [
           // Botão de alternar tema
           BlocBuilder<TemaBloc, TemaState>(
@@ -192,10 +217,12 @@ class _TelaDashboardState extends State<TelaDashboard> {
   }
 
   Widget _construirSecaoFiltros() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? Colors.grey[850] : Colors.white,
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.1),
@@ -328,6 +355,10 @@ class _TelaDashboardState extends State<TelaDashboard> {
             icone: Icons.account_balance_wallet,
             cor: relatorio.saldo >= 0 ? Colors.blue : Colors.orange,
           ),
+          const SizedBox(height: 24),
+
+          // Gráfico de Linha - Evolução
+          GraficoLinhaEvolucao(transacoesDiarias: relatorio.transacoesDiarias),
           const SizedBox(height: 24),
 
           // Gráfico de Barras - Despesas Diárias
