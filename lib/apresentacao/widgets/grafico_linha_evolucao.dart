@@ -7,10 +7,7 @@ import '../../../dominio/entidades/relatorio_financeiro.dart';
 class GraficoLinhaEvolucao extends StatelessWidget {
   final List<TransacaoDiaria> transacoesDiarias;
 
-  const GraficoLinhaEvolucao({
-    super.key,
-    required this.transacoesDiarias,
-  });
+  const GraficoLinhaEvolucao({super.key, required this.transacoesDiarias});
 
   @override
   Widget build(BuildContext context) {
@@ -18,18 +15,14 @@ class GraficoLinhaEvolucao extends StatelessWidget {
       return const Card(
         child: Padding(
           padding: EdgeInsets.all(32.0),
-          child: Center(
-            child: Text('Nenhum dado disponível'),
-          ),
+          child: Center(child: Text('Nenhum dado disponível')),
         ),
       );
     }
 
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -37,10 +30,7 @@ class GraficoLinhaEvolucao extends StatelessWidget {
           children: [
             const Text(
               'Evolução Receitas vs. Despesas',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             SizedBox(
@@ -73,15 +63,17 @@ class GraficoLinhaEvolucao extends StatelessWidget {
                           if (value.toInt() >= transacoesDiarias.length) {
                             return const Text('');
                           }
-                          
+
                           // Mostra apenas algumas datas
                           final totalDias = transacoesDiarias.length;
-                          final intervalo = totalDias > 15 ? 5 : (totalDias > 7 ? 3 : 2);
-                          
+                          final intervalo = totalDias > 15
+                              ? 5
+                              : (totalDias > 7 ? 3 : 2);
+
                           if (value.toInt() % intervalo != 0) {
                             return const Text('');
                           }
-                          
+
                           final transacao = transacoesDiarias[value.toInt()];
                           final formatador = DateFormat('dd/MM');
                           return Padding(
@@ -147,9 +139,13 @@ class GraficoLinhaEvolucao extends StatelessWidget {
                       tooltipBgColor: Colors.black87,
                       getTooltipItems: (touchedSpots) {
                         return touchedSpots.map((spot) {
-                          final formatadorMoeda =
-                              NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
-                          final tipo = spot.barIndex == 0 ? 'Receita' : 'Despesa';
+                          final formatadorMoeda = NumberFormat.currency(
+                            locale: 'pt_BR',
+                            symbol: 'R\$',
+                          );
+                          final tipo = spot.barIndex == 0
+                              ? 'Receita'
+                              : 'Despesa';
                           return LineTooltipItem(
                             '$tipo\n${formatadorMoeda.format(spot.y)}',
                             const TextStyle(
@@ -216,10 +212,7 @@ class GraficoLinhaEvolucao extends StatelessWidget {
         const SizedBox(width: 8),
         Text(
           titulo,
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-          ),
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
         ),
       ],
     );

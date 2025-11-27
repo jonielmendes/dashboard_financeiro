@@ -40,11 +40,13 @@ class _TelaDashboardState extends State<TelaDashboard> {
 
   void _gerarRelatorio() {
     final filtroState = context.read<FiltroBloc>().state;
-    context.read<RelatorioBloc>().add(GerarRelatorio(
-          dataInicio: filtroState.filtroData.dataInicio,
-          dataFim: filtroState.filtroData.dataFim,
-          categoriaId: filtroState.categoriaIdSelecionada,
-        ));
+    context.read<RelatorioBloc>().add(
+      GerarRelatorio(
+        dataInicio: filtroState.filtroData.dataInicio,
+        dataFim: filtroState.filtroData.dataFim,
+        categoriaId: filtroState.categoriaIdSelecionada,
+      ),
+    );
   }
 
   @override
@@ -167,9 +169,7 @@ class _TelaDashboardState extends State<TelaDashboard> {
                 child: BlocBuilder<RelatorioBloc, RelatorioState>(
                   builder: (context, state) {
                     if (state is RelatorioCarregando) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
+                      return const Center(child: CircularProgressIndicator());
                     }
 
                     if (state is RelatorioErro) {
@@ -204,7 +204,9 @@ class _TelaDashboardState extends State<TelaDashboard> {
                     }
 
                     return const Center(
-                      child: Text('Selecione um período para visualizar os dados'),
+                      child: Text(
+                        'Selecione um período para visualizar os dados',
+                      ),
                     );
                   },
                 ),
@@ -218,7 +220,7 @@ class _TelaDashboardState extends State<TelaDashboard> {
 
   Widget _construirSecaoFiltros() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -237,10 +239,7 @@ class _TelaDashboardState extends State<TelaDashboard> {
         children: [
           const Text(
             'Filtros',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 12),
           BlocBuilder<FiltroBloc, FiltroState>(
@@ -259,8 +258,8 @@ class _TelaDashboardState extends State<TelaDashboard> {
                       onSelected: (selected) {
                         if (selected) {
                           context.read<FiltroBloc>().add(
-                                AlterarFiltroData(filtro),
-                              );
+                            AlterarFiltroData(filtro),
+                          );
                         }
                       },
                     );
@@ -303,8 +302,8 @@ class _TelaDashboardState extends State<TelaDashboard> {
                       ],
                       onChanged: (value) {
                         context.read<FiltroBloc>().add(
-                              AlterarCategoriaFiltro(value),
-                            );
+                          AlterarCategoriaFiltro(value),
+                        );
                       },
                     );
                   },
@@ -319,7 +318,10 @@ class _TelaDashboardState extends State<TelaDashboard> {
   }
 
   Widget _construirConteudoDashboard(dynamic relatorio) {
-    final formatadorMoeda = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
+    final formatadorMoeda = NumberFormat.currency(
+      locale: 'pt_BR',
+      symbol: 'R\$',
+    );
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -364,10 +366,7 @@ class _TelaDashboardState extends State<TelaDashboard> {
           // Gráfico de Barras - Despesas Diárias
           const Text(
             'Receitas e Despesas Diárias',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 12),
           GraficoBarrasDespesas(transacoesDiarias: relatorio.transacoesDiarias),
@@ -376,10 +375,7 @@ class _TelaDashboardState extends State<TelaDashboard> {
           // Gráfico de Pizza - Despesas por Categoria
           const Text(
             'Despesas por Categoria',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 12),
           GraficoPizzaCategorias(

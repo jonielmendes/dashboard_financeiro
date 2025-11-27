@@ -8,10 +8,7 @@ import '../../../dominio/entidades/relatorio_financeiro.dart';
 class GraficoBarrasDespesas extends StatelessWidget {
   final List<TransacaoDiaria> transacoesDiarias;
 
-  const GraficoBarrasDespesas({
-    super.key,
-    required this.transacoesDiarias,
-  });
+  const GraficoBarrasDespesas({super.key, required this.transacoesDiarias});
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +25,7 @@ class GraficoBarrasDespesas extends StatelessWidget {
 
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -51,12 +46,15 @@ class GraficoBarrasDespesas extends StatelessWidget {
                       getTooltipItem: (group, groupIndex, rod, rodIndex) {
                         final transacao = transacoesDiarias[group.x.toInt()];
                         final formatador = DateFormat('dd/MM');
-                        final formatadorMoeda =
-                            NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
+                        final formatadorMoeda = NumberFormat.currency(
+                          locale: 'pt_BR',
+                          symbol: 'R\$',
+                        );
 
                         String tipo = rodIndex == 0 ? 'Receita' : 'Despesa';
-                        double valor =
-                            rodIndex == 0 ? transacao.receita : transacao.despesa;
+                        double valor = rodIndex == 0
+                            ? transacao.receita
+                            : transacao.despesa;
 
                         return BarTooltipItem(
                           '${formatador.format(transacao.data)}\n',
@@ -93,15 +91,17 @@ class GraficoBarrasDespesas extends StatelessWidget {
                           if (value.toInt() >= transacoesDiarias.length) {
                             return const Text('');
                           }
-                          
+
                           // Mostra apenas algumas datas para não sobrepor
                           final totalDias = transacoesDiarias.length;
-                          final intervalo = totalDias > 15 ? 3 : (totalDias > 7 ? 2 : 1);
-                          
+                          final intervalo = totalDias > 15
+                              ? 3
+                              : (totalDias > 7 ? 2 : 1);
+
                           if (value.toInt() % intervalo != 0) {
                             return const Text('');
                           }
-                          
+
                           final transacao = transacoesDiarias[value.toInt()];
                           final formatador = DateFormat('dd/MM');
                           return Padding(
@@ -167,35 +167,32 @@ class GraficoBarrasDespesas extends StatelessWidget {
   }
 
   List<BarChartGroupData> _criarGruposBarras() {
-    return List.generate(
-      transacoesDiarias.length,
-      (index) {
-        final transacao = transacoesDiarias[index];
-        return BarChartGroupData(
-          x: index,
-          barRods: [
-            BarChartRodData(
-              toY: transacao.receita,
-              color: Colors.green,
-              width: 12,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(6),
-                topRight: Radius.circular(6),
-              ),
+    return List.generate(transacoesDiarias.length, (index) {
+      final transacao = transacoesDiarias[index];
+      return BarChartGroupData(
+        x: index,
+        barRods: [
+          BarChartRodData(
+            toY: transacao.receita,
+            color: Colors.green,
+            width: 12,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(6),
+              topRight: Radius.circular(6),
             ),
-            BarChartRodData(
-              toY: transacao.despesa,
-              color: Colors.red,
-              width: 12,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(6),
-                topRight: Radius.circular(6),
-              ),
+          ),
+          BarChartRodData(
+            toY: transacao.despesa,
+            color: Colors.red,
+            width: 12,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(6),
+              topRight: Radius.circular(6),
             ),
-          ],
-        );
-      },
-    );
+          ),
+        ],
+      );
+    });
   }
 
   double _calcularMaxY() {
@@ -221,10 +218,7 @@ class GraficoBarrasDespesas extends StatelessWidget {
         const SizedBox(width: 8),
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-          ),
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
         ),
       ],
     );
