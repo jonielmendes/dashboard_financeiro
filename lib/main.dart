@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 
 // Importações dos BLoCs
 import 'apresentacao/bloc/transacao/transacao_bloc.dart';
@@ -19,7 +18,6 @@ import 'dados/repositorios/repositorio_relatorio_impl.dart';
 import 'dados/fontes_dados/banco_dados_local.dart';
 import 'dados/fontes_dados/transacao_data_source_local.dart';
 import 'dados/fontes_dados/categoria_data_source_local.dart';
-import 'dados/fontes_dados/transacao_data_source_remoto.dart';
 
 // Importação das Telas
 import 'apresentacao/telas/tela_dashboard.dart';
@@ -86,38 +84,17 @@ class DashboardFinanceiroApp extends StatefulWidget {
 class _DashboardFinanceiroAppState extends State<DashboardFinanceiroApp> {
   @override
   Widget build(BuildContext context) {
-    // Configuração do cliente GraphQL para Hasura
-    // NOTA: Substitua a URL pelo seu endpoint Hasura
-    final HttpLink httpLink = HttpLink(
-      'https://seu-projeto.hasura.app/v1/graphql',
-      // Para desenvolvimento local: 'http://localhost:8080/v1/graphql'
-    );
-
-    final AuthLink authLink = AuthLink(
-      getToken: () async => 'Bearer SEU_TOKEN_AQUI',
-      // Em produção, busque o token de forma segura
-    );
-
-    final Link link = authLink.concat(httpLink);
-
-    final GraphQLClient clienteGraphQL = GraphQLClient(
-      cache: GraphQLCache(),
-      link: link,
-    );
-
-    // Inicializa as fontes de dados
+    // Inicializa as fontes de dados locais
     final transacaoDataSourceLocal = TransacaoDataSourceLocal(
       widget.bancoDados,
     );
     final categoriaDataSourceLocal = CategoriaDataSourceLocal(
       widget.bancoDados,
     );
-    final transacaoDataSourceRemoto = TransacaoDataSourceRemoto(clienteGraphQL);
 
     // Inicializa os repositórios
     final repositorioTransacao = RepositorioTransacaoImpl(
       transacaoDataSourceLocal,
-      transacaoDataSourceRemoto,
     );
 
     final repositorioCategoria = RepositorioCategoriaImpl(
@@ -126,7 +103,6 @@ class _DashboardFinanceiroAppState extends State<DashboardFinanceiroApp> {
 
     final repositorioRelatorio = RepositorioRelatorioImpl(
       repositorioTransacao,
-      repositorioCategoria,
     );
 
     return MultiBlocProvider(

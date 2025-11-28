@@ -22,6 +22,20 @@ class GraficoPizzaCategorias extends StatefulWidget {
 class _GraficoPizzaCategoriasState extends State<GraficoPizzaCategorias> {
   int touchedIndex = -1;
 
+  // Paleta de cores vivas e distintas para o gráfico
+  static const List<Color> _coresVivas = [
+    Color(0xFFE74C3C), // Vermelho vibrante
+    Color(0xFF3498DB), // Azul vibrante
+    Color(0xFF2ECC71), // Verde vibrante
+    Color(0xFFF39C12), // Laranja vibrante
+    Color(0xFF9B59B6), // Roxo vibrante
+    Color(0xFF1ABC9C), // Turquesa vibrante
+    Color(0xFFE91E63), // Rosa vibrante
+    Color(0xFFFF5722), // Laranja escuro vibrante
+    Color(0xFF00BCD4), // Ciano vibrante
+    Color(0xFF8BC34A), // Verde claro vibrante
+  ];
+
   @override
   Widget build(BuildContext context) {
     if (widget.despesasPorCategoria.isEmpty) {
@@ -89,7 +103,10 @@ class _GraficoPizzaCategoriasState extends State<GraficoPizzaCategorias> {
                   spacing: 16,
                   runSpacing: 12,
                   alignment: WrapAlignment.center,
-                  children: widget.despesasPorCategoria.entries.map((entry) {
+                  children: widget.despesasPorCategoria.entries.toList().asMap().entries.map((mapEntry) {
+                    final legendaIndex = mapEntry.key;
+                    final entry = mapEntry.value;
+                    
                     // Busca a categoria
                     dynamic categoriaEncontrada;
                     for (var cat in categorias) {
@@ -114,6 +131,9 @@ class _GraficoPizzaCategoriasState extends State<GraficoPizzaCategorias> {
                     }
 
                     final porcentagem = (entry.value / total * 100).toStringAsFixed(1);
+                    
+                    // Usa a mesma cor da paleta viva
+                    final cor = _coresVivas[legendaIndex % _coresVivas.length];
 
                     return SizedBox(
                       width: 140,
@@ -123,7 +143,7 @@ class _GraficoPizzaCategoriasState extends State<GraficoPizzaCategorias> {
                             width: 16,
                             height: 16,
                             decoration: BoxDecoration(
-                              color: (categoriaEncontrada as dynamic).cor as Color? ?? Colors.grey,
+                              color: cor,
                               borderRadius: BorderRadius.circular(4),
                             ),
                           ),
@@ -195,12 +215,8 @@ class _GraficoPizzaCategoriasState extends State<GraficoPizzaCategorias> {
       final fontSize = isTouched ? 16.0 : 12.0;
       final porcentagem = (entry.value / total * 100).toStringAsFixed(1);
 
-      Color cor = Colors.grey;
-      try {
-        cor = (categoria as dynamic).cor as Color;
-      } catch (e) {
-        cor = Colors.blue; // Cor padrão se falhar
-      }
+      // Usa cor da paleta viva baseada no índice
+      Color cor = _coresVivas[index % _coresVivas.length];
 
       secoes.add(
         PieChartSectionData(

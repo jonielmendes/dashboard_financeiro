@@ -13,6 +13,7 @@ import '../bloc/categoria/categoria_state.dart';
 import '../bloc/categoria/categoria_event.dart';
 import '../bloc/tema/tema_bloc.dart';
 import '../bloc/tema/tema_event.dart';
+import 'tela_adicionar_transacao.dart';
 import '../bloc/tema/tema_state.dart';
 import '../widgets/cartao_resumo.dart';
 import '../widgets/grafico_barras_despesas.dart';
@@ -61,7 +62,7 @@ class _TelaDashboardState extends State<TelaDashboard> {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             Text(
-              'Controle de Fluxo de Caixa',
+              'Gestão Inteligente de Finanças',
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
             ),
           ],
@@ -130,8 +131,11 @@ class _TelaDashboardState extends State<TelaDashboard> {
         ],
       ),
       body: BlocListener<FiltroBloc, FiltroState>(
+        listenWhen: (previous, current) {
+          return previous.filtroData.tipo != current.filtroData.tipo ||
+                 previous.categoriaIdSelecionada != current.categoriaIdSelecionada;
+        },
         listener: (context, state) {
-          // Quando o filtro muda, regenera o relatório
           _gerarRelatorio();
         },
         child: BlocListener<RelatorioBloc, RelatorioState>(
@@ -215,6 +219,18 @@ class _TelaDashboardState extends State<TelaDashboard> {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const TelaAdicionarTransacao(),
+            ),
+          ).then((_) => _gerarRelatorio()); // Atualiza ao voltar
+        },
+        icon: const Icon(Icons.add),
+        label: const Text('Nova Transação'),
+      ),
     );
   }
 
@@ -276,6 +292,7 @@ class _TelaDashboardState extends State<TelaDashboard> {
                 return BlocBuilder<FiltroBloc, FiltroState>(
                   builder: (context, filtroState) {
                     return DropdownButtonFormField<String?>(
+                      key: ValueKey(filtroState.categoriaIdSelecionada),
                       decoration: const InputDecoration(
                         labelText: 'Filtrar por categoria',
                         border: OutlineInputBorder(),
@@ -287,18 +304,24 @@ class _TelaDashboardState extends State<TelaDashboard> {
                           value: null,
                           child: Text('Todas as categorias'),
                         ),
-                        ...categoriaState.categorias.map((categoria) {
-                          return DropdownMenuItem(
-                            value: (categoria as dynamic).id,
-                            child: Row(
-                              children: [
-                                Text((categoria as dynamic).icone),
-                                const SizedBox(width: 8),
-                                Text((categoria as dynamic).nome),
-                              ],
-                            ),
-                          );
-                        }),
+                        ...categoriaState.categorias
+                            .where((categoria) {
+                              // Mostra apenas categorias de DESPESA
+                              final cat = categoria as dynamic;
+                              return cat.tipo.toString() == 'TipoCategoria.despesa';
+                            })
+                            .map((categoria) {
+                              return DropdownMenuItem(
+                                value: (categoria as dynamic).id,
+                                child: Row(
+                                  children: [
+                                    Text((categoria as dynamic).icone),
+                                    const SizedBox(width: 8),
+                                    Text((categoria as dynamic).nome),
+                                  ],
+                                ),
+                              );
+                            }),
                       ],
                       onChanged: (value) {
                         context.read<FiltroBloc>().add(

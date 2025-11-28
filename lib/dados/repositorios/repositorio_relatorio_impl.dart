@@ -7,17 +7,14 @@ import 'package:pdf/widgets.dart' as pw;
 import '../../dominio/entidades/relatorio_financeiro.dart';
 import '../../dominio/repositorios/repositorio_relatorio.dart';
 import '../../dominio/repositorios/repositorio_transacao.dart';
-import '../../dominio/repositorios/repositorio_categoria.dart';
 
 /// Implementação do Repository de Relatórios
 /// Gera relatórios a partir dos dados de transações
 class RepositorioRelatorioImpl implements RepositorioRelatorio {
   final RepositorioTransacao _repositorioTransacao;
-  final RepositorioCategoria _repositorioCategoria;
 
   RepositorioRelatorioImpl(
     this._repositorioTransacao,
-    this._repositorioCategoria,
   );
 
   @override
