@@ -1,5 +1,4 @@
 <img width="2816" height="1536" alt="Image" src="https://github.com/user-attachments/assets/14bb1f06-f700-43ba-844e-5f1c7872fec0" />
-A new Flutter project.
 
 # 📊 Dashboard Financeiro
 
@@ -16,7 +15,6 @@ Projeto desenvolvido para a **Atividade 6 - PRODM**, focado em visualização de
 - Adicionar/editar/excluir transações
 - Gerenciar categorias personalizadas
 - Filtros por período (7 dias, 30 dias, mês, ano)
-- Exportação de relatórios em **CSV** e **PDF**
 - Tema claro/escuro
 
 ## 🛠️ Tecnologias
