@@ -41,7 +41,7 @@ class RepositorioCategoriaImpl implements RepositorioCategoria {
   @override
   Future<void> criar(Categoria categoria) async {
     try {
-      final model = categoria as dynamic;
+      final model = CategoriaModel.deEntidade(categoria);
       await _dataSourceLocal.inserir(model);
     } catch (e) {
       throw Exception('Erro ao criar categoria: $e');
@@ -51,7 +51,7 @@ class RepositorioCategoriaImpl implements RepositorioCategoria {
   @override
   Future<void> atualizar(Categoria categoria) async {
     try {
-      final model = categoria as dynamic;
+      final model = CategoriaModel.deEntidade(categoria);
       await _dataSourceLocal.atualizar(model);
     } catch (e) {
       throw Exception('Erro ao atualizar categoria: $e');
