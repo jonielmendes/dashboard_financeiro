@@ -16,7 +16,7 @@ class TelaGraficos extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = isDark ? const Color(0xFF121212) : const Color(0xFFF5F7FA);
-    
+
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
@@ -39,9 +39,12 @@ class TelaGraficos extends StatelessWidget {
                       return IconButton(
                         icon: Icon(
                           temaState.isDark ? Icons.light_mode : Icons.dark_mode,
-                          color: temaState.isDark ? const Color(0xFFFDD835) : Colors.black87,
+                          color: temaState.isDark
+                              ? const Color(0xFFFDD835)
+                              : Colors.black87,
                         ),
-                        onPressed: () => context.read<TemaBloc>().add(AlternarTema()),
+                        onPressed: () =>
+                            context.read<TemaBloc>().add(AlternarTema()),
                       );
                     },
                   ),
@@ -76,26 +79,42 @@ class TelaGraficos extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                const Text(
-                  'Evolução Temporal',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 12),
-                GraficoLinhaEvolucao(transacoesDiarias: state.relatorio.transacoesDiarias),
-                const SizedBox(height: 24),
-                const Text(
-                  'Receitas e Despesas',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 12),
-                GraficoBarrasDespesas(transacoesDiarias: state.relatorio.transacoesDiarias),
-                const SizedBox(height: 24),
-                const Text(
-                  'Despesas por Categoria',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 12),
-                GraficoPizzaCategorias(despesasPorCategoria: state.relatorio.despesasPorCategoria),
+                    const Text(
+                      'Evolução Temporal',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    GraficoLinhaEvolucao(
+                      transacoesDiarias: state.relatorio.transacoesDiarias,
+                    ),
+                    const SizedBox(height: 24),
+                    const Text(
+                      'Receitas e Despesas',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    GraficoBarrasDespesas(
+                      transacoesDiarias: state.relatorio.transacoesDiarias,
+                    ),
+                    const SizedBox(height: 24),
+                    const Text(
+                      'Despesas por Categoria',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    GraficoPizzaCategorias(
+                      despesasPorCategoria:
+                          state.relatorio.despesasPorCategoria,
+                    ),
                   ],
                 ),
               ],
