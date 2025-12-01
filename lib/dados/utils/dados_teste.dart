@@ -5,21 +5,10 @@ import '../../dominio/entidades/transacao.dart';
 class DadosTeste {
   static const _uuid = Uuid();
 
-  /// Gera transações de teste para os últimos 90 dias (3 meses)
+  /// Gera transações de teste para o último mês (30 dias)
   static List<Transacao> gerarTransacoesTeste() {
     final agora = DateTime.now();
-    final transacoes = <Transacao>[];
-
-    // Gera dados para os últimos 3 meses
-    for (var mesOffset = 0; mesOffset < 3; mesOffset++) {
-      final mes = agora.month - mesOffset;
-      final ano = agora.year + (mes <= 0 ? -1 : 0);
-      final mesAjustado = mes <= 0 ? mes + 12 : mes;
-
-      transacoes.addAll(_gerarTransacoesMes(ano, mesAjustado));
-    }
-
-    return transacoes;
+    return _gerarTransacoesMes(agora.year, agora.month);
   }
 
   /// Gera transações realistas para um mês específico
