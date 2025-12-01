@@ -48,7 +48,7 @@ class _TelaDashboardState extends State<TelaDashboard> {
     final bgColor = isDark ? const Color(0xFF121212) : const Color(0xFFF5F7FA);
     final cardColor = isDark ? const Color(0xFF1E1E1E) : Colors.white;
     final textColor = isDark ? Colors.white : const Color(0xFF212121);
-    
+
     return Scaffold(
       backgroundColor: bgColor,
       body: BlocListener<FiltroBloc, FiltroState>(
@@ -66,7 +66,11 @@ class _TelaDashboardState extends State<TelaDashboard> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.error_outline, size: 64, color: Colors.red),
+                    const Icon(
+                      Icons.error_outline,
+                      size: 64,
+                      color: Colors.red,
+                    ),
                     const SizedBox(height: 16),
                     Text(state.mensagem, textAlign: TextAlign.center),
                     const SizedBox(height: 16),
@@ -94,7 +98,7 @@ class _TelaDashboardState extends State<TelaDashboard> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final cardColor = isDark ? const Color(0xFF1E1E1E) : Colors.white;
     final textColor = isDark ? Colors.white70 : Colors.grey[600];
-    
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -115,9 +119,12 @@ class _TelaDashboardState extends State<TelaDashboard> {
                     return IconButton(
                       icon: Icon(
                         temaState.isDark ? Icons.light_mode : Icons.dark_mode,
-                        color: temaState.isDark ? const Color(0xFFFDD835) : Colors.black87,
+                        color: temaState.isDark
+                            ? const Color(0xFFFDD835)
+                            : Colors.black87,
                       ),
-                      onPressed: () => context.read<TemaBloc>().add(AlternarTema()),
+                      onPressed: () =>
+                          context.read<TemaBloc>().add(AlternarTema()),
                     );
                   },
                 ),
@@ -157,7 +164,9 @@ class _TelaDashboardState extends State<TelaDashboard> {
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: isDark ? Colors.black.withOpacity(0.3) : Colors.black.withOpacity(0.05),
+                        color: isDark
+                            ? Colors.black.withOpacity(0.3)
+                            : Colors.black.withOpacity(0.05),
                         blurRadius: isDark ? 12 : 10,
                         offset: const Offset(0, 6),
                       ),
@@ -168,7 +177,11 @@ class _TelaDashboardState extends State<TelaDashboard> {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.account_balance_wallet, color: const Color(0xFFFDD835), size: 28),
+                          Icon(
+                            Icons.account_balance_wallet,
+                            color: const Color(0xFFFDD835),
+                            size: 28,
+                          ),
                           const SizedBox(width: 8),
                           Text(
                             'Saldo',
@@ -187,7 +200,9 @@ class _TelaDashboardState extends State<TelaDashboard> {
                         child: Text(
                           moeda.format(relatorio.saldo),
                           style: TextStyle(
-                            color: relatorio.saldo >= 0 ? const Color(0xFFFDD835) : Colors.orange,
+                            color: relatorio.saldo >= 0
+                                ? const Color(0xFFFDD835)
+                                : Colors.orange,
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
                           ),
@@ -210,17 +225,19 @@ class _TelaDashboardState extends State<TelaDashboard> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final cardColor = isDark ? const Color(0xFF1E1E1E) : Colors.white;
     final textColor = isDark ? Colors.white : const Color(0xFF212121);
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: cardColor,
         boxShadow: [
           BoxShadow(
-            color: isDark ? Colors.black.withOpacity(0.3) : Colors.black.withOpacity(0.05),
+            color: isDark
+                ? Colors.black.withOpacity(0.3)
+                : Colors.black.withOpacity(0.05),
             spreadRadius: 1,
             blurRadius: 10,
-          )
+          ),
         ],
       ),
       child: Column(
@@ -246,7 +263,10 @@ class _TelaDashboardState extends State<TelaDashboard> {
                     label: Text(filtro.rotulo),
                     selected: state.filtroData.tipo == tipo,
                     onSelected: (sel) {
-                      if (sel) context.read<FiltroBloc>().add(AlterarFiltroData(filtro));
+                      if (sel)
+                        context.read<FiltroBloc>().add(
+                          AlterarFiltroData(filtro),
+                        );
                     },
                   );
                 }).toList(),
@@ -256,7 +276,8 @@ class _TelaDashboardState extends State<TelaDashboard> {
           const SizedBox(height: 8),
           BlocBuilder<CategoriaBloc, CategoriaState>(
             builder: (context, categoriaState) {
-              if (categoriaState is! CategoriaCarregada) return const SizedBox.shrink();
+              if (categoriaState is! CategoriaCarregada)
+                return const SizedBox.shrink();
               return BlocBuilder<FiltroBloc, FiltroState>(
                 builder: (context, filtroState) {
                   return DropdownButtonFormField<String?>(
@@ -268,18 +289,22 @@ class _TelaDashboardState extends State<TelaDashboard> {
                     value: filtroState.categoriaIdSelecionada,
                     items: [
                       const DropdownMenuItem(value: null, child: Text('Todas')),
-                      ...categoriaState.categorias.where((cat) {
-                        final c = cat as dynamic;
-                        return c.tipo.toString() == 'TipoCategoria.despesa';
-                      }).map((cat) {
-                        final c = cat as dynamic;
-                        return DropdownMenuItem<String>(
-                          value: c.id as String,
-                          child: Text('${c.icone} ${c.nome}'),
-                        );
-                      }),
+                      ...categoriaState.categorias
+                          .where((cat) {
+                            final c = cat as dynamic;
+                            return c.tipo.toString() == 'TipoCategoria.despesa';
+                          })
+                          .map((cat) {
+                            final c = cat as dynamic;
+                            return DropdownMenuItem<String>(
+                              value: c.id as String,
+                              child: Text('${c.icone} ${c.nome}'),
+                            );
+                          }),
                     ],
-                    onChanged: (val) => context.read<FiltroBloc>().add(AlterarCategoriaFiltro(val)),
+                    onChanged: (val) => context.read<FiltroBloc>().add(
+                      AlterarCategoriaFiltro(val),
+                    ),
                   );
                 },
               );
