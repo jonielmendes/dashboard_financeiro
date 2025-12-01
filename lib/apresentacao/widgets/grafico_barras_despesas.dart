@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import '../../../dominio/entidades/relatorio_financeiro.dart';
 
 /// Widget de Gráfico de Barras para visualizar Receitas e Despesas Diárias
-/// Utiliza fl_chart para renderização
+/// Utiliza fl_chart para renderizaçãor
 class GraficoBarrasDespesas extends StatelessWidget {
   final List<TransacaoDiaria> transacoesDiarias;
 
@@ -128,10 +128,23 @@ class GraficoBarrasDespesas extends StatelessWidget {
                     leftTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
+                        interval: _calcularMaxY() / 5,
                         getTitlesWidget: (value, meta) {
+                          // Formatar valores grandes
+                          if (value >= 10000) {
+                            return Text(
+                              'R\$${(value / 1000).toStringAsFixed(0)}k',
+                              style: const TextStyle(fontSize: 9),
+                            );
+                          } else if (value >= 1000) {
+                            return Text(
+                              'R\$${(value / 1000).toStringAsFixed(1)}k',
+                              style: const TextStyle(fontSize: 9),
+                            );
+                          }
                           return Text(
                             'R\$${value.toInt()}',
-                            style: const TextStyle(fontSize: 10),
+                            style: const TextStyle(fontSize: 9),
                           );
                         },
                         reservedSize: 50,

@@ -18,3 +18,21 @@ class CarregarCategoriasPorTipo extends CategoriaEvent {
   @override
   List<Object?> get props => [tipo];
 }
+
+class AdicionarCategoria extends CategoriaEvent {
+  final Categoria categoria;
+
+  const AdicionarCategoria(this.categoria);
+
+  @override
+  List<Object?> get props => [categoria];
+}
+
+class ExcluirCategoria extends CategoriaEvent {
+  final String categoriaId;
+
+  const ExcluirCategoria(this.categoriaId);
+
+  @override
+  List<Object?> get props => [categoriaId];
+}

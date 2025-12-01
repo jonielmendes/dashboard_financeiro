@@ -90,13 +90,26 @@ class GraficoLinhaEvolucao extends StatelessWidget {
                     leftTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
+                        interval: _calcularMaxY() / 5,
                         getTitlesWidget: (value, meta) {
+                          // Formatar valores grandes
+                          if (value >= 10000) {
+                            return Text(
+                              'R\$${(value / 1000).toStringAsFixed(0)}k',
+                              style: const TextStyle(fontSize: 9),
+                            );
+                          } else if (value >= 1000) {
+                            return Text(
+                              'R\$${(value / 1000).toStringAsFixed(1)}k',
+                              style: const TextStyle(fontSize: 9),
+                            );
+                          }
                           return Text(
-                            'R\$${(value / 1000).toStringAsFixed(0)}k',
-                            style: const TextStyle(fontSize: 10),
+                            'R\$${value.toInt()}',
+                            style: const TextStyle(fontSize: 9),
                           );
                         },
-                        reservedSize: 45,
+                        reservedSize: 50,
                       ),
                     ),
                   ),

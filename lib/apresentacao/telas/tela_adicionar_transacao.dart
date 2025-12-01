@@ -16,7 +16,6 @@ class TelaAdicionarTransacao extends StatefulWidget {
 
 class _TelaAdicionarTransacaoState extends State<TelaAdicionarTransacao> {
   final _formKey = GlobalKey<FormState>();
-  final _tituloController = TextEditingController();
   final _valorController = TextEditingController();
   final _descricaoController = TextEditingController();
   
@@ -26,7 +25,6 @@ class _TelaAdicionarTransacaoState extends State<TelaAdicionarTransacao> {
 
   @override
   void dispose() {
-    _tituloController.dispose();
     _valorController.dispose();
     _descricaoController.dispose();
     super.dispose();
@@ -42,7 +40,7 @@ class _TelaAdicionarTransacaoState extends State<TelaAdicionarTransacao> {
       
       final transacao = Transacao(
         id: id,
-        titulo: _tituloController.text,
+        titulo: 'Transação ${_tipo.name}', // Título automático
         valor: valor,
         categoriaId: _categoriaId!,
         tipo: _tipo,
@@ -71,7 +69,7 @@ class _TelaAdicionarTransacaoState extends State<TelaAdicionarTransacao> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Nova Transação'),
+        title: const Text('AURUM - Nova Transação'),
       ),
       body: Form(
         key: _formKey,
@@ -99,18 +97,6 @@ class _TelaAdicionarTransacaoState extends State<TelaAdicionarTransacao> {
                   _categoriaId = null; // Reset categoria ao mudar tipo
                 });
               },
-            ),
-            const SizedBox(height: 16),
-            
-            // Título
-            TextFormField(
-              controller: _tituloController,
-              decoration: const InputDecoration(
-                labelText: 'Título',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.title),
-              ),
-              validator: (value) => value?.isEmpty ?? true ? 'Campo obrigatório' : null,
             ),
             const SizedBox(height: 16),
             

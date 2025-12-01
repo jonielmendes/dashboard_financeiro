@@ -15,6 +15,11 @@ class TransacaoDataSourceLocal {
       orderBy: 'data DESC',
     );
 
+    print('🔍 Buscando transações no banco... Total: ${maps.length}');
+    if (maps.isNotEmpty) {
+      print('📋 Primeira transação: ${maps.first}');
+    }
+
     return List.generate(maps.length, (i) {
       return TransacaoModel.doMapSQLite(maps[i]);
     });
@@ -72,10 +77,13 @@ class TransacaoDataSourceLocal {
   /// Insere uma nova transação
   Future<void> inserir(TransacaoModel transacao) async {
     final db = await _bancoDados.database;
+    final map = transacao.paraMapSQLite();
+    print('🔵 Inserindo transação no banco: $map');
     await db.insert(
       'transacoes',
-      transacao.paraMapSQLite(),
+      map,
     );
+    print('✅ Transação inserida com sucesso!');
   }
 
   /// Atualiza uma transação existente

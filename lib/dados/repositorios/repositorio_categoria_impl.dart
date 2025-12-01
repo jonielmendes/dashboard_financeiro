@@ -1,6 +1,7 @@
 import '../../dominio/entidades/categoria.dart';
 import '../../dominio/repositorios/repositorio_categoria.dart';
 import '../fontes_dados/categoria_data_source_local.dart';
+import '../modelos/categoria_model.dart';
 
 /// Implementação do Repository de Categorias
 /// Usa apenas fonte de dados local (categorias são gerenciadas localmente)
@@ -40,7 +41,7 @@ class RepositorioCategoriaImpl implements RepositorioCategoria {
   @override
   Future<void> criar(Categoria categoria) async {
     try {
-      final model = categoria as dynamic;
+      final model = CategoriaModel.deEntidade(categoria);
       await _dataSourceLocal.inserir(model);
     } catch (e) {
       throw Exception('Erro ao criar categoria: $e');
@@ -50,7 +51,7 @@ class RepositorioCategoriaImpl implements RepositorioCategoria {
   @override
   Future<void> atualizar(Categoria categoria) async {
     try {
-      final model = categoria as dynamic;
+      final model = CategoriaModel.deEntidade(categoria);
       await _dataSourceLocal.atualizar(model);
     } catch (e) {
       throw Exception('Erro ao atualizar categoria: $e');

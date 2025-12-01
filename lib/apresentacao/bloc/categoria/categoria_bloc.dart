@@ -9,6 +9,8 @@ class CategoriaBloc extends Bloc<CategoriaEvent, CategoriaState> {
   CategoriaBloc(this.repositorio) : super(CategoriaInicial()) {
     on<CarregarCategorias>(_onCarregarCategorias);
     on<CarregarCategoriasPorTipo>(_onCarregarCategoriasPorTipo);
+    on<AdicionarCategoria>(_onAdicionarCategoria);
+    on<ExcluirCategoria>(_onExcluirCategoria);
   }
 
   Future<void> _onCarregarCategorias(
@@ -34,6 +36,32 @@ class CategoriaBloc extends Bloc<CategoriaEvent, CategoriaState> {
       emit(CategoriaCarregada(categorias));
     } catch (e) {
       emit(CategoriaErro('Erro ao carregar categorias por tipo: $e'));
+    }
+  }
+
+  Future<void> _onAdicionarCategoria(
+    AdicionarCategoria event,
+    Emitter<CategoriaState> emit,
+  ) async {
+    try {
+      await repositorio.criar(event.categoria);
+      final categorias = await repositorio.buscarTodas();
+      emit(CategoriaCarregada(categorias));
+    } catch (e) {
+      emit(CategoriaErro('Erro ao adicionar categoria: $e'));
+    }
+  }
+
+  Future<void> _onExcluirCategoria(
+    ExcluirCategoria event,
+    Emitter<CategoriaState> emit,
+  ) async {
+    try {
+      await repositorio.deletar(event.categoriaId);
+      final categorias = await repositorio.buscarTodas();
+      emit(CategoriaCarregada(categorias));
+    } catch (e) {
+      emit(CategoriaErro('Erro ao excluir categoria: $e'));
     }
   }
 }

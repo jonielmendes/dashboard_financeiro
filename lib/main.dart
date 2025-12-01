@@ -20,7 +20,7 @@ import 'dados/fontes_dados/transacao_data_source_local.dart';
 import 'dados/fontes_dados/categoria_data_source_local.dart';
 
 // Importação das Telas
-import 'apresentacao/telas/tela_dashboard.dart';
+import 'apresentacao/telas/tela_navegacao_principal.dart';
 
 // Importação dos dados de teste
 import 'dados/utils/dados_teste.dart';
@@ -101,9 +101,7 @@ class _DashboardFinanceiroAppState extends State<DashboardFinanceiroApp> {
       categoriaDataSourceLocal,
     );
 
-    final repositorioRelatorio = RepositorioRelatorioImpl(
-      repositorioTransacao,
-    );
+    final repositorioRelatorio = RepositorioRelatorioImpl(repositorioTransacao);
 
     return MultiBlocProvider(
       providers: [
@@ -127,7 +125,7 @@ class _DashboardFinanceiroAppState extends State<DashboardFinanceiroApp> {
             // Tema Claro
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(
-                seedColor: Colors.blue,
+                seedColor: const Color(0xFFFDD835),
                 brightness: Brightness.light,
               ),
               useMaterial3: true,
@@ -137,24 +135,36 @@ class _DashboardFinanceiroAppState extends State<DashboardFinanceiroApp> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              appBarTheme: const AppBarTheme(centerTitle: true, elevation: 0),
+              appBarTheme: const AppBarTheme(
+                centerTitle: true,
+                elevation: 0,
+                backgroundColor: Color(0xFFFDD835),
+                foregroundColor: Colors.black87,
+              ),
             ),
             // Tema Escuro
             darkTheme: ThemeData(
               colorScheme: ColorScheme.fromSeed(
-                seedColor: Colors.blue,
+                seedColor: const Color(0xFFFDD835),
                 brightness: Brightness.dark,
               ),
+              scaffoldBackgroundColor: const Color(0xFF121212),
               useMaterial3: true,
               cardTheme: CardThemeData(
                 elevation: 2,
+                color: const Color(0xFF1E1E1E),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              appBarTheme: const AppBarTheme(centerTitle: true, elevation: 0),
+              appBarTheme: const AppBarTheme(
+                centerTitle: true,
+                elevation: 0,
+                backgroundColor: Color(0xFF121212),
+                foregroundColor: Color(0xFFFDD835),
+              ),
             ),
-            home: const TelaDashboard(),
+            home: const TelaNavegacaoPrincipal(),
           );
         },
       ),

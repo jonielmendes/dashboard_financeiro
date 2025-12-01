@@ -13,9 +13,7 @@ import '../../dominio/repositorios/repositorio_transacao.dart';
 class RepositorioRelatorioImpl implements RepositorioRelatorio {
   final RepositorioTransacao _repositorioTransacao;
 
-  RepositorioRelatorioImpl(
-    this._repositorioTransacao,
-  );
+  RepositorioRelatorioImpl(this._repositorioTransacao);
 
   @override
   Future<RelatorioFinanceiro> gerarRelatorio({
@@ -25,14 +23,14 @@ class RepositorioRelatorioImpl implements RepositorioRelatorio {
   }) async {
     // Busca transações do período
     List<dynamic> transacoes;
-    
+
     if (categoriaId != null) {
       transacoes = await _repositorioTransacao.buscarPorCategoria(categoriaId);
       // Filtra por data
       transacoes = transacoes.where((t) {
         final data = (t as dynamic).data as DateTime;
         return data.isAfter(dataInicio.subtract(const Duration(seconds: 1))) &&
-               data.isBefore(dataFim.add(const Duration(seconds: 1)));
+            data.isBefore(dataFim.add(const Duration(seconds: 1)));
       }).toList();
     } else {
       transacoes = await _repositorioTransacao.buscarPorPeriodo(
@@ -51,27 +49,27 @@ class RepositorioRelatorioImpl implements RepositorioRelatorio {
       final t = transacao as dynamic;
       final valor = t.valor as double;
       final categoriaId = t.categoriaId as String;
-      
+
       if (t.tipo.toString().contains('receita')) {
         totalReceitas += valor;
-        receitasPorCategoria[categoriaId] = 
+        receitasPorCategoria[categoriaId] =
             (receitasPorCategoria[categoriaId] ?? 0) + valor;
       } else {
         totalDespesas += valor;
-        despesasPorCategoria[categoriaId] = 
+        despesasPorCategoria[categoriaId] =
             (despesasPorCategoria[categoriaId] ?? 0) + valor;
       }
     }
 
     // Agrupa por dia
     Map<String, TransacaoDiaria> transacoesPorDia = {};
-    
+
     for (final transacao in transacoes) {
       final t = transacao as dynamic;
       final data = t.data as DateTime;
       final dataKey = DateFormat('yyyy-MM-dd').format(data);
       final valor = t.valor as double;
-      
+
       if (!transacoesPorDia.containsKey(dataKey)) {
         transacoesPorDia[dataKey] = TransacaoDiaria(
           data: DateTime(data.year, data.month, data.day),
@@ -79,9 +77,9 @@ class RepositorioRelatorioImpl implements RepositorioRelatorio {
           despesa: 0,
         );
       }
-      
+
       final atual = transacoesPorDia[dataKey]!;
-      
+
       if (t.tipo.toString().contains('receita')) {
         transacoesPorDia[dataKey] = TransacaoDiaria(
           data: atual.data,
@@ -115,7 +113,7 @@ class RepositorioRelatorioImpl implements RepositorioRelatorio {
   @override
   Future<String> exportarCSV(RelatorioFinanceiro relatorio) async {
     final formatador = DateFormat('dd/MM/yyyy');
-    
+
     List<List<dynamic>> linhas = [
       ['Data', 'Receitas', 'Despesas', 'Saldo'],
     ];
@@ -131,15 +129,23 @@ class RepositorioRelatorioImpl implements RepositorioRelatorio {
 
     linhas.add(['']);
     linhas.add(['Resumo']);
-    linhas.add(['Total de Receitas', 'R\$ ${relatorio.totalReceitas.toStringAsFixed(2)}']);
-    linhas.add(['Total de Despesas', 'R\$ ${relatorio.totalDespesas.toStringAsFixed(2)}']);
+    linhas.add([
+      'Total de Receitas',
+      'R\$ ${relatorio.totalReceitas.toStringAsFixed(2)}',
+    ]);
+    linhas.add([
+      'Total de Despesas',
+      'R\$ ${relatorio.totalDespesas.toStringAsFixed(2)}',
+    ]);
     linhas.add(['Saldo', 'R\$ ${relatorio.saldo.toStringAsFixed(2)}']);
 
     String csv = const ListToCsvConverter().convert(linhas);
 
     // Salva o arquivo
     final diretorio = await getApplicationDocumentsDirectory();
-    final arquivo = File('${diretorio.path}/relatorio_${DateTime.now().millisecondsSinceEpoch}.csv');
+    final arquivo = File(
+      '${diretorio.path}/relatorio_${DateTime.now().millisecondsSinceEpoch}.csv',
+    );
     await arquivo.writeAsString(csv);
 
     return arquivo.path;
@@ -158,7 +164,10 @@ class RepositorioRelatorioImpl implements RepositorioRelatorio {
             children: [
               pw.Text(
                 'Relatório Financeiro',
-                style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold),
+                style: pw.TextStyle(
+                  fontSize: 24,
+                  fontWeight: pw.FontWeight.bold,
+                ),
               ),
               pw.SizedBox(height: 10),
               pw.Text(
@@ -166,32 +175,46 @@ class RepositorioRelatorioImpl implements RepositorioRelatorio {
                 style: const pw.TextStyle(fontSize: 14),
               ),
               pw.SizedBox(height: 20),
-              
+
               // Resumo
               pw.Text(
                 'Resumo',
-                style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold),
+                style: pw.TextStyle(
+                  fontSize: 18,
+                  fontWeight: pw.FontWeight.bold,
+                ),
               ),
               pw.SizedBox(height: 10),
-              pw.Text('Total de Receitas: R\$ ${relatorio.totalReceitas.toStringAsFixed(2)}'),
-              pw.Text('Total de Despesas: R\$ ${relatorio.totalDespesas.toStringAsFixed(2)}'),
+              pw.Text(
+                'Total de Receitas: R\$ ${relatorio.totalReceitas.toStringAsFixed(2)}',
+              ),
+              pw.Text(
+                'Total de Despesas: R\$ ${relatorio.totalDespesas.toStringAsFixed(2)}',
+              ),
               pw.Text('Saldo: R\$ ${relatorio.saldo.toStringAsFixed(2)}'),
               pw.SizedBox(height: 20),
-              
+
               // Tabela de transações diárias
               pw.Text(
                 'Transações Diárias',
-                style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold),
+                style: pw.TextStyle(
+                  fontSize: 18,
+                  fontWeight: pw.FontWeight.bold,
+                ),
               ),
               pw.SizedBox(height: 10),
               pw.Table.fromTextArray(
                 headers: ['Data', 'Receitas', 'Despesas', 'Saldo'],
-                data: relatorio.transacoesDiarias.map((t) => [
-                  formatador.format(t.data),
-                  'R\$ ${t.receita.toStringAsFixed(2)}',
-                  'R\$ ${t.despesa.toStringAsFixed(2)}',
-                  'R\$ ${t.saldo.toStringAsFixed(2)}',
-                ]).toList(),
+                data: relatorio.transacoesDiarias
+                    .map(
+                      (t) => [
+                        formatador.format(t.data),
+                        'R\$ ${t.receita.toStringAsFixed(2)}',
+                        'R\$ ${t.despesa.toStringAsFixed(2)}',
+                        'R\$ ${t.saldo.toStringAsFixed(2)}',
+                      ],
+                    )
+                    .toList(),
               ),
             ],
           );
@@ -201,7 +224,9 @@ class RepositorioRelatorioImpl implements RepositorioRelatorio {
 
     // Salva o arquivo
     final diretorio = await getApplicationDocumentsDirectory();
-    final arquivo = File('${diretorio.path}/relatorio_${DateTime.now().millisecondsSinceEpoch}.pdf');
+    final arquivo = File(
+      '${diretorio.path}/relatorio_${DateTime.now().millisecondsSinceEpoch}.pdf',
+    );
     await arquivo.writeAsBytes(await pdf.save());
 
     return arquivo.path;
