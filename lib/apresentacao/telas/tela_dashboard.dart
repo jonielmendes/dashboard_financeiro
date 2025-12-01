@@ -46,8 +46,6 @@ class _TelaDashboardState extends State<TelaDashboard> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = isDark ? const Color(0xFF121212) : const Color(0xFFF5F7FA);
-    final cardColor = isDark ? const Color(0xFF1E1E1E) : Colors.white;
-    final textColor = isDark ? Colors.white : const Color(0xFF212121);
 
     return Scaffold(
       backgroundColor: bgColor,

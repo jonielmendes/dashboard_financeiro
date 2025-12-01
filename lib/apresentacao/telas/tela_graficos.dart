@@ -16,7 +16,6 @@ class TelaGraficos extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = isDark ? const Color(0xFF121212) : const Color(0xFFF5F7FA);
-    final textColor = isDark ? const Color(0xFFFDD835) : const Color(0xFF212121);
     
     return Scaffold(
       backgroundColor: bgColor,
