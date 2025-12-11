@@ -46,6 +46,7 @@ class TransacaoBloc extends Bloc<TransacaoEvent, TransacaoState> {
   }
 
   Future<void> _onCriarTransacao(
+    //repassa a ordem
     CriarTransacao event,
     Emitter<TransacaoState> emit,
   ) async {

@@ -21,11 +21,7 @@ class BancoDadosLocal {
     final caminhoDb = await getDatabasesPath();
     final caminho = join(caminhoDb, 'dashboard_financeiro.db');
 
-    return await openDatabase(
-      caminho,
-      version: 1,
-      onCreate: _criarBanco,
-    );
+    return await openDatabase(caminho, version: 1, onCreate: _criarBanco);
   }
 
   Future<void> _criarBanco(Database db, int version) async {
@@ -80,42 +76,42 @@ class BancoDadosLocal {
         'nome': 'Alimentação',
         'icone': '🍔',
         'cor_hex': '#FF6B6B',
-        'tipo': 'despesa'
+        'tipo': 'despesa',
       },
       {
         'id': 'cat_002',
         'nome': 'Transporte',
         'icone': '🚗',
         'cor_hex': '#4ECDC4',
-        'tipo': 'despesa'
+        'tipo': 'despesa',
       },
       {
         'id': 'cat_003',
         'nome': 'Moradia',
         'icone': '🏠',
         'cor_hex': '#95E1D3',
-        'tipo': 'despesa'
+        'tipo': 'despesa',
       },
       {
         'id': 'cat_004',
         'nome': 'Saúde',
         'icone': '⚕️',
         'cor_hex': '#F38181',
-        'tipo': 'despesa'
+        'tipo': 'despesa',
       },
       {
         'id': 'cat_005',
         'nome': 'Lazer',
         'icone': '🎮',
         'cor_hex': '#AA96DA',
-        'tipo': 'despesa'
+        'tipo': 'despesa',
       },
       {
         'id': 'cat_006',
         'nome': 'Educação',
         'icone': '📚',
         'cor_hex': '#FCBAD3',
-        'tipo': 'despesa'
+        'tipo': 'despesa',
       },
       // Categorias de Receita
       {
@@ -123,21 +119,21 @@ class BancoDadosLocal {
         'nome': 'Salário',
         'icone': '💰',
         'cor_hex': '#6BCF7F',
-        'tipo': 'receita'
+        'tipo': 'receita',
       },
       {
         'id': 'cat_008',
         'nome': 'Freelance',
         'icone': '💻',
         'cor_hex': '#4D96FF',
-        'tipo': 'receita'
+        'tipo': 'receita',
       },
       {
         'id': 'cat_009',
         'nome': 'Investimentos',
         'icone': '📈',
         'cor_hex': '#FFD93D',
-        'tipo': 'receita'
+        'tipo': 'receita',
       },
     ];
 

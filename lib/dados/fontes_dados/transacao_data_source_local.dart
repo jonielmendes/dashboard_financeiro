@@ -34,10 +34,7 @@ class TransacaoDataSourceLocal {
     final List<Map<String, dynamic>> maps = await db.query(
       'transacoes',
       where: 'data >= ? AND data <= ?',
-      whereArgs: [
-        dataInicio.toIso8601String(),
-        dataFim.toIso8601String(),
-      ],
+      whereArgs: [dataInicio.toIso8601String(), dataFim.toIso8601String()],
       orderBy: 'data DESC',
     );
 
@@ -80,6 +77,7 @@ class TransacaoDataSourceLocal {
     final map = transacao.paraMapSQLite();
     print('🔵 Inserindo transação no banco: $map');
     await db.insert(
+      //executa
       'transacoes',
       map,
     );
@@ -100,27 +98,20 @@ class TransacaoDataSourceLocal {
   /// Deleta uma transação
   Future<void> deletar(String id) async {
     final db = await _bancoDados.database;
-    await db.delete(
-      'transacoes',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    await db.delete('transacoes', where: 'id = ?', whereArgs: [id]);
   }
 
   /// Marca uma transação como não sincronizada
   Future<void> marcarComoNaoSincronizada(String id, String acao) async {
     final db = await _bancoDados.database;
-    await db.insert(
-      'sincronizacao',
-      {
-        'id': DateTime.now().millisecondsSinceEpoch.toString(),
-        'tabela': 'transacoes',
-        'registro_id': id,
-        'acao': acao,
-        'sincronizado': 0,
-        'criado_em': DateTime.now().toIso8601String(),
-      },
-    );
+    await db.insert('sincronizacao', {
+      'id': DateTime.now().millisecondsSinceEpoch.toString(),
+      'tabela': 'transacoes',
+      'registro_id': id,
+      'acao': acao,
+      'sincronizado': 0,
+      'criado_em': DateTime.now().toIso8601String(),
+    });
   }
 
   /// Busca transações não sincronizadas
