@@ -113,6 +113,7 @@ class _TelaDashboardState extends State<TelaDashboard> {
                   fit: BoxFit.contain,
                 ),
                 BlocBuilder<TemaBloc, TemaState>(
+                  //AlternarTema()
                   builder: (context, temaState) {
                     return IconButton(
                       icon: Icon(
@@ -134,6 +135,7 @@ class _TelaDashboardState extends State<TelaDashboard> {
             child: Column(
               children: [
                 Row(
+                  // Cartões de resumo
                   children: [
                     Expanded(
                       child: CartaoResumo(
@@ -156,6 +158,7 @@ class _TelaDashboardState extends State<TelaDashboard> {
                 ),
                 const SizedBox(height: 16),
                 Container(
+                  // Cartão de saldo
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     color: cardColor,
@@ -212,7 +215,7 @@ class _TelaDashboardState extends State<TelaDashboard> {
               ],
             ),
           ),
-          _construirFiltros(),
+          _construirFiltros(), // Filtros
           const SizedBox(height: 80), // Espaço para o BottomNavigationBar
         ],
       ),
