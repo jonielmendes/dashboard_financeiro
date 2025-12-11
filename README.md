@@ -24,13 +24,6 @@ Projeto desenvolvido para a **Atividade 6 - PRODM**, focado em visualização de
 - **SQLite** (sqflite) - Armazenamento local
 - **fl_chart** - Gráficos interativos
 
-## Arquitetura
-
-**Clean Architecture** com separação em camadas:
-
-- **Apresentação**: UI + BLoCs (Transação, Categoria, Relatório, Filtro, Tema)
-- **Domínio**: Entidades e interfaces
-- **Dados**: Repositórios + SQLite
 
 ## Estrutura do Projeto
 
